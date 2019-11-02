@@ -18,7 +18,6 @@
     "eslint-plugin-import": "^2.18.2"
   },
   "dependencies": {
-    "@types/google-apps-script": "0.0.62",
-    "@types/node": "^12.12.5"
+    "@types/google-apps-script": "0.0.62"
   }
 }

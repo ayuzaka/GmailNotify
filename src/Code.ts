@@ -1,4 +1,4 @@
-function sendLine(message: string): void {
+const sendLine = (message: string): void => {
   const token = 'xxxxxxx';
   const payload = { message };
   const options = {
@@ -7,9 +7,9 @@ function sendLine(message: string): void {
     headers: { Authorization: `Bearer ${token}` }
   };
   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
-}
+};
 
-function fetchContactMail(): string[] {
+const fetchContactMail = (): string[] => {
   // 取得間隔
   const now = Math.floor(new Date().getTime() / 1000);
   const interval = 30; // 30分前〜現在の新着メールを取得
@@ -30,7 +30,7 @@ function fetchContactMail(): string[] {
   });
 
   return displayMessages;
-}
+};
 
 function main(): void {
   const newMessages = fetchContactMail();

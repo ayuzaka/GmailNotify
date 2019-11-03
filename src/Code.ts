@@ -20,15 +20,13 @@ function fetchContactMail(): string[] {
   const threads = GmailApp.search(searchCondition);
   const messages = GmailApp.getMessagesForThreads(threads);
   const displayMessages = messages.map(message => {
-    message.slice(-1)[0].markRead();
+    const msg = message.slice(-1)[0];
+    msg.markRead();
 
-    return `\n【date】${message.slice(-1)[0].getDate()}
-            \n【From】${message.slice(-1)[0].getFrom()}
-            \n【Subject】${message.slice(-1)[0].getSubject()}
-            \n【Body】${message
-              .slice(-1)[0]
-              .getPlainBody()
-              .slice(0, 200)}`;
+    return `\n【date】${msg.getDate()}
+            \n【From】${msg.getFrom()}
+            \n【Subject】${msg.getSubject()}
+            \n【Body】${msg.getPlainBody().slice(0, 200)}`;
   });
 
   return displayMessages;

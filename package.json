@@ -1,12 +1,11 @@
 {
-  "name": "gmailToLine",
+  "name": "GmailNotify",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "push": "node_modules/.bin/clasp push",
-    "open": "node_modules/.bin/clasp open"
+    "push": "npx clasp push",
+    "open": "npx clasp open"
   },
   "keywords": [],
   "author": "",

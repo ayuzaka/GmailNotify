@@ -9,6 +9,19 @@ const sendLINE = (message: string): void => {
   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
 };
 
+const sendSlack = (message: string): void => {
+  const webhookURL = '';
+  const payload = { text: message };
+
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+  };
+
+  UrlFetchApp.fetch(webhookURL, options);
+};
+
 const fetchContactMail = (): string[] => {
   // 取得間隔
   const now = Math.floor(new Date().getTime() / 1000);
@@ -36,7 +49,7 @@ function main(): void {
   const newMessages = fetchContactMail();
   if (newMessages.length > 0) {
     newMessages.forEach((message) => {
-      sendLINE(message);
+      sendSlack(message);
     });
   }
 }

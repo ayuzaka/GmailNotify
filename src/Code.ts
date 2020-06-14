@@ -20,7 +20,9 @@ const getFormatDate = (date: Date): string => {
 };
 
 const sendLINE = (message: string): void => {
-  const token = 'xxxxxxx';
+  const token = PropertiesService.getScriptProperties().getProperty(
+    'LINE_TOKEN',
+  );
   const payload = { message };
   const options = {
     method: 'post',
@@ -31,7 +33,9 @@ const sendLINE = (message: string): void => {
 };
 
 const sendSlack = (message: MailMessage): void => {
-  const webhookURL = '';
+  const webhookURL = PropertiesService.getScriptProperties().getProperty(
+    'SLACK_WEB_HOOK_URL',
+  );
   const payload = {
     attachments: [
       {

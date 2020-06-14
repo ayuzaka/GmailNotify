@@ -4,13 +4,15 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins":["@typescript-eslint"],
+  "plugins":["prettier", "@typescript-eslint"],
   "env": {
     "es6": true,
     "node": true
   },
   "extends": [
-    "airbnb-base"
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
   ]
 }
 

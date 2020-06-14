@@ -6,7 +6,7 @@ type MailMessage = {
   link: string
 }
 
-const dayOfWeekList = ['月', '火', '水', '木', '金', '土']
+const dayOfWeekList = ['日', '月', '火', '水', '木', '金', '土']
 
 const getFormatDate = (date: Date): string => {
   const year = date.getFullYear()

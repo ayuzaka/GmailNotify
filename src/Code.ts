@@ -3,6 +3,7 @@ type MailMessage = {
   from: string
   subject: string
   body: string
+  link: string
 }
 
 const dayOfWeekList = ['月', '火', '水', '木', '金', '土']
@@ -36,6 +37,7 @@ const sendSlack = (message: MailMessage): void => {
   const webhookURL = PropertiesService.getScriptProperties().getProperty(
     'SLACK_WEB_HOOK_URL'
   )
+
   const payload = {
     attachments: [
       {
@@ -53,7 +55,7 @@ const sendSlack = (message: MailMessage): void => {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `*${message.subject}*`,
+              text: `<${message.link}|*${message.subject}*>`,
             },
           },
           {
@@ -90,20 +92,22 @@ const fetchContactMail = (): MailMessage[] => {
   const searchCondition = `(is:unread after: ${term})`
 
   const threads = GmailApp.search(searchCondition)
-  const messages = GmailApp.getMessagesForThreads(threads)
-  const displayMessages = messages.map((message) => {
-    const msg = message.slice(-1)[0]
-    msg.markRead()
+  const mailMessages = threads.map((thread) => {
+    const messages = GmailApp.getMessagesForThread(thread)
+    // スレッドの中の最新のメッセージのみを取得
+    const message = messages[messages.length - 1]
+    message.markRead()
 
     return {
-      date: getFormatDate(msg.getDate()),
-      from: msg.getFrom(),
-      subject: msg.getSubject(),
-      body: msg.getPlainBody().slice(0, 200),
+      date: getFormatDate(message.getDate()),
+      from: message.getFrom(),
+      subject: message.getSubject() || '件名なし',
+      body: message.getPlainBody(),
+      link: thread.getPermalink(),
     }
   })
 
-  return displayMessages
+  return mailMessages
 }
 
 function main(): void {

@@ -1,3 +1,24 @@
+type MailMessage = {
+  date: string
+  from: string
+  subject: string
+  body: string
+}
+
+const dayOfWeekList = ['月', '火', '水', '木', '金', '土'];
+
+const getFormatDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayOfWeek = dayOfWeekList[date.getDay()];
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  return `${year}/${month}/${day} (${dayOfWeek}) ${hours}:${minutes}:${seconds}`;
+};
+
 const sendLINE = (message: string): void => {
   const token = 'xxxxxxx';
   const payload = { message };
@@ -9,9 +30,43 @@ const sendLINE = (message: string): void => {
   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
 };
 
-const sendSlack = (message: string): void => {
+const sendSlack = (message: MailMessage): void => {
   const webhookURL = '';
-  const payload = { text: message };
+  const payload = {
+    attachments: [
+      {
+        blocks: [
+          {
+            type: 'context',
+            elements: [
+              {
+                type: 'mrkdwn',
+                text: `*${message.from}*\n :date: ${message.date}`,
+              },
+            ],
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `*${message.subject}*`,
+            },
+          },
+          {
+            type: 'divider',
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'plain_text',
+              text: message.body,
+              emoji: false,
+            },
+          },
+        ],
+      },
+    ],
+  };
 
   const options = {
     method: 'post',
@@ -22,7 +77,7 @@ const sendSlack = (message: string): void => {
   UrlFetchApp.fetch(webhookURL, options);
 };
 
-const fetchContactMail = (): string[] => {
+const fetchContactMail = (): MailMessage[] => {
   // 取得間隔
   const now = Math.floor(new Date().getTime() / 1000);
   const interval = 30; // 30分前〜現在の新着メールを取得
@@ -36,10 +91,12 @@ const fetchContactMail = (): string[] => {
     const msg = message.slice(-1)[0];
     msg.markRead();
 
-    return `\n【date】${msg.getDate()}
-            \n【From】${msg.getFrom()}
-            \n【Subject】${msg.getSubject()}
-            \n【Body】${msg.getPlainBody().slice(0, 200)}`;
+    return {
+      date: getFormatDate(msg.getDate()),
+      from: msg.getFrom(),
+      subject: msg.getSubject(),
+      body: msg.getPlainBody().slice(0, 200),
+    };
   });
 
   return displayMessages;

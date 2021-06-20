@@ -1,6 +1,6 @@
 # GmailNotify
 
-30分ごとに未読の Gmail を通知する
+Notify unread Gmail every 30 minutes.
 
 ## Usage
 
